@@ -29,6 +29,7 @@ Requires [Arc Foundry](https://github.com/circlefin/arc-foundry) (`arc-forge`).
 ```bash
 git clone --recurse-submodules https://github.com/wngstnr-code/dayzro
 cp .env.example .env
+ln -s ../.env contracts/.env   # one env for the whole repo
 cd contracts
 arc-forge test --no-match-path 'test/fork/*'
 arc-forge test --match-path 'test/fork/*' --fork-url https://rpc.mainnet.arc.io --network arc
