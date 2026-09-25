@@ -2,19 +2,20 @@
     padding-bottom: 12px;
 }
 .footer_wrapper {
-    background: #FFF;
-    padding: 24px 24px 30px;
+    background: #fff;
+    padding: 12px 12px 0;
     border-radius: 25px;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 12px;
 }
+
 .footer_title {
+    padding-top: 12px;
     text-align: center;
     font: 700 12px/1.455 $kFontPublicSans;
     letter-spacing: 0.05em;
     color: $kColorBlack;
-
     text-transform: uppercase;
 
     :global(b) {
@@ -22,49 +23,33 @@
         color: $kColorPink;
     }
 }
+
 .footer_row {
-    margin-top: 18px;
+    padding: 40px 44px 0;
     display: flex;
     align-items: flex-start;
-    gap: 30px;
+    gap: 48px;
 }
 .footer_content {
-    width: 212px;
+    width: 260px;
     flex-shrink: 0;
 }
-.footer_content_title {
-    @include setFontClashGrotest500(36px, 1.1, -0.015em, getColorBlack());
+.footer_content_logo {
+    display: inline-flex;
 }
 .footer_content_text {
     margin-top: 16px;
-    @include setFontPublicSans400(16px, 1.5, normal, #6E5A52);
+    @include dzDescription;
 }
 
 .footer_nav {
-    width: calc(100% - 242px);
-    padding: 40px 45px;
-    border-radius: 20px;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
 }
-.footer_nav_inner {
-
-    display: flex;
-    justify-content: space-between;
-    gap: 24px;
-
-    max-width: 925px;
-    width: 100%;
-
-}
-.footer_copyright {
-    margin-top: 40px;
-    text-align: right;
-    white-space: nowrap;
-
-    @include setFontPublicSans400(16px, 1.5, normal, #4A3A34);
-}
-
 .footer_nav_title {
-    @include setFontPublicSans600(16px, 1.5, 0.05em, #191e28);
+    @include setFontPublicSans600(14px, 1.5, 0.05em, getColorBlack());
     text-transform: uppercase;
 }
 .footer_nav_list {
@@ -72,28 +57,18 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 14px;
 }
 .footer_nav_link {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
+    @include setFontPublicSans400(16px, 1.5, normal, #4a3a34);
+    transition: color 0.2s ease;
 
-    &:not([target="_blank"]) {
-        .footer_nav_link_name svg {
-            display: none;
-        }
+    &:hover {
+        color: $kColorEmber;
     }
-}
-.footer_nav_link_left {
-    display: flex;
-    flex-direction: column;
-}
-.footer_nav_link_name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    @include setFontPublicSans400(16px, 1.5, normal, #4A3A34);
 
     svg {
         width: 1.1em;
@@ -102,32 +77,52 @@
     }
 }
 
+.footer_bottom {
+    margin: 56px 44px 0;
+    padding-top: 24px;
+    border-top: 1px solid rgba($kColorInk, 0.08);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    @include setFontPublicSans400(14px, 1.5, normal, getColorGray());
+}
+
+// Giant wordmark closing the page, cut at the baseline by the card edge.
+.footer_wordmark {
+    margin: 8px 0 -0.2em;
+    text-align: center;
+    font: 600 clamp(96px, 22vw, 340px) / 1 $kFontClashGrotesk;
+    letter-spacing: -0.05em;
+    background: linear-gradient(180deg, rgba($kColorSunrise, 0.9), rgba($kColorMagenta, 0.55));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    user-select: none;
+}
+
 @include -screen-xl {
     .footer_row {
-        flex-direction: column-reverse;
-        align-items: center;
+        flex-direction: column;
+        gap: 40px;
+    }
+    .footer_content {
+        width: auto;
+        max-width: 420px;
     }
     .footer_nav {
         width: 100%;
-        padding: 30px 0;
-    }
-    .footer_content {
-        text-align: center;
-    }
-    .footer_copyright {
-        text-align: center;
-        margin-top: 20px;
     }
 }
 
 @include -screen-md {
-    .footer_nav_inner {
-        flex-wrap: wrap;
-        gap: 40px;
-        justify-content: flex-start;
+    .footer_row {
+        padding: 44px 16px 0;
     }
-
-    .footer_nav_group {
-        min-width: 180px;
+    .footer_nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .footer_bottom {
+        margin: 44px 16px 0;
+        flex-direction: column;
     }
 }
