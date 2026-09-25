@@ -1,0 +1,15 @@
+/*
+  Dayzro "Ink Sunrise" accents for the app.
+  Primary buttons carry the sunrise gradient on dark (ember to deep magenta, white text
+  passes AA on both ends) and plain ink on light.
+*/
+[data-theme='dark'] .btn-primary:not(:disabled):not(.btn-disabled) {
+  background-image: linear-gradient(90deg, #c2410c 0%, #b0126a 100%);
+  box-shadow: 0 0 24px -8px rgba(255, 122, 61, 0.55);
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+[data-theme='dark'] .btn-primary:not(:disabled):not(.btn-disabled):hover {
+  filter: brightness(1.08);
+  box-shadow: 0 0 30px -6px rgba(255, 122, 61, 0.7);
+}

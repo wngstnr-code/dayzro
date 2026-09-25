@@ -1,0 +1,42 @@
+/*
+  Styles that were component-scoped (<style> blocks) in the Svelte bridge UI.
+  Class names are prefixed so they stay local to the ported components.
+*/
+
+/* Stepper/Step.svelte */
+.dz-step::before {
+  background-color: rgba(255, 138, 61, 0.2) !important;
+}
+
+.dz-step.step-primary::before {
+  background-color: var(--primary-brand) !important;
+}
+
+.dz-step.step-previous::before {
+  background-color: var(--primary-brand) !important;
+}
+
+/* ConnectButton/ConnectButton.svelte */
+.wc-parent-glass {
+  background: rgba(255, 255, 255, 0.02);
+  transition: background 0.3s ease-in-out;
+  border: 1px solid rgb(255 255 255 / 5%);
+  &:hover {
+    background: rgb(255 255 255 / 5%);
+  }
+}
+
+.btn-glass-bg {
+  border: 1px solid rgb(255 255 255 / 5%);
+  background: rgb(255 255 255 / 5%);
+}
+
+/* TokenInput/TokenInput.svelte */
+.max-button {
+  font-family: 'Public Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.14px;
+}
