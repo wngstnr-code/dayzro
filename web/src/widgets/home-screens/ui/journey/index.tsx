@@ -9,38 +9,47 @@ import { HOME_PAG } from "@/widgets/home-screens/lib";
 import { homePageData } from "@/content/pages/home";
 import css from "./journey.module.scss";
 
-const external = [
+// Card positions along the path (the design has six). The three audience cards take the
+// start, the middle and the end of the path so it reads evenly.
+const positions = [
     {
         className: css.journey_24q2,
         progress: 0.01,
-        variant: undefined,
+        variant: "magenta",
     },
     {
         className: css.journey_24q3,
         progress: 0.12,
-        variant: "pink",
+        variant: "sunrise",
     },
     {
         className: css.journey_24q4,
         progress: 0.24,
-        variant: "orange",
+        variant: "gold",
     },
     {
         className: css.journey_25q1,
         progress: 0.4,
-        variant: "blue",
+        variant: "magenta",
     },
     {
         className: css.journey_25q2,
         progress: 0.6,
-        variant: "pink",
+        variant: "sunrise",
     },
     {
         className: css.journey_25h1,
         progress: 0.92,
-        variant: "orange",
+        variant: "gold",
     },
-];
+] as const;
+
+// Suppliers (sunrise) at the start, buyers (magenta) on the path halfway down, financiers (gold) at the end.
+const cards = [
+    { ...positions[0], variant: "sunrise" },
+    { className: css.journey_path_mid, progress: 0.45, variant: "magenta" },
+    { ...positions[5], variant: "gold" },
+] as const;
 
 export const Journey: React.FC = () => {
     const data = homePageData;
@@ -58,7 +67,7 @@ export const Journey: React.FC = () => {
             if (path) {
                 gsap.to(path, {
                     scrollTrigger: {
-                        trigger: "#journey-roadmap",
+                        trigger: "#journey-path-area",
                         start: "top 50%",
                         end: "bottom 90%",
                         invalidateOnRefresh: true,
@@ -83,23 +92,24 @@ export const Journey: React.FC = () => {
         <section className={css.journey} ref={journeyRef} id={HOME_PAG.JOURNEY}>
             <div className={css.journey_content}>
                 <p className={css.journey_label}>
-                    {data.roadmap_suptitle}
+                    {data.audience_suptitle}
                 </p>
                 <h2 className={css.journey_title}>
-                    {data.roadmap_title}
+                    {data.audience_title}
                 </h2>
-                <div className={css.journey_roadmap} id="journey-roadmap">
+                <div className={css.journey_path} id="journey-path-area">
                     <JourneyPath />
-                    {data.roadmap_list.map((item, index) => {
-                        const ext = external[index];
-                        if (!ext) return null;
+                    {data.audience_list.map((item, index) => {
+                        const card = cards[index];
+                        if (!card) return null;
                         return (
                             <JourneyItem
-                                className={ext.className}
-                                progress={ext.progress}
-                                variant={ext.variant as "blue" | "pink" | "orange" | undefined}
+                                className={card.className}
+                                progress={card.progress}
+                                variant={card.variant}
                                 title={item.title}
-                                content={item.data.map((p) => p.text)}
+                                content={item.points}
+                                uniform
                                 key={item.id}
                             />
                         );

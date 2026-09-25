@@ -9,15 +9,18 @@ interface Props {
     content: string[];
     className?: string;
     progress: number;
-    variant?: "blue" | "pink" | "orange";
+    variant?: "magenta" | "sunrise" | "gold";
+    /** Same box for every card: fixed width and a shared minimum list height. */
+    uniform?: boolean;
 }
 
 export const JourneyItem: React.FC<Props> = ({
     content,
     title,
     className,
-    variant = "blue",
+    variant = "magenta",
     progress,
+    uniform = false,
 }) => {
     return (
         <div
@@ -25,6 +28,7 @@ export const JourneyItem: React.FC<Props> = ({
                 "journey-item",
                 css.item,
                 css["_" + variant],
+                uniform && css._uniform,
                 className
             )}
         >

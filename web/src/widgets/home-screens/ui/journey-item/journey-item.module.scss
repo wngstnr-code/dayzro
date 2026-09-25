@@ -1,7 +1,7 @@
 .item {
     font-size: 16px;
 
-    &._blue {
+    &._magenta {
         .item_list {
             border: 1px solid transparent;
             border-image: linear-gradient(to bottom, transparent, #D1127A);
@@ -14,7 +14,7 @@
         }
     }
 
-    &._pink {
+    &._sunrise {
         .item_list {
             border: 1px solid transparent;
             border-image: linear-gradient(to bottom, transparent, $kColorSunrise);
@@ -27,7 +27,7 @@
         }
     }
 
-    &._orange {
+    &._gold {
         .item_list {
             border: 1px solid transparent;
             border-image: linear-gradient(to bottom, transparent, #ffc037);
@@ -38,6 +38,15 @@
                 rgba(#ffc037, 0.1) 120%
             );
         }
+    }
+}
+
+// Audience cards: one size for all three, whatever the copy length.
+.item._uniform {
+    width: 20em;
+
+    .item_list {
+        min-height: 11.5em;
     }
 }
 

@@ -25,34 +25,34 @@ export const homePageData: HomePageData = {
   governance_title: "No custody, no backend, only contracts",
   governance_text:
     "Money moves between wallets and the Dayzro contracts on Arc. Every invoice, sale and payment is public and verifiable onchain, and the app runs entirely in your browser.",
-  roadmap_suptitle: "Roadmap",
-  roadmap_title: "Where Dayzro goes next",
-  roadmap_list: [
+  audience_suptitle: "Who it's for",
+  audience_title: "Built for everyone in the trade",
+  audience_list: [
     {
       id: 1,
-      title: "Q4 2026",
-      data: [
-        { id: 1, text: "Registry and facility contracts live on Arc mainnet" },
-        { id: 2, text: "Create, accept, finance and settle invoices in the app" },
-        { id: 3, text: "Receivables in USDC and EURC" },
+      title: "Suppliers",
+      points: [
+        "Get paid the day your buyer accepts the invoice",
+        "No collateral and no bank loan to apply for",
+        "Keep the full invoice value minus a small discount",
       ],
     },
     {
       id: 2,
-      title: "Q1 2027",
-      data: [
-        { id: 4, text: "Buyer guarantees and per buyer limits in the app" },
-        { id: 5, text: "Public payment history for every buyer" },
-        { id: 6, text: "Financier dashboard for facilities" },
+      title: "Buyers",
+      points: [
+        "Pay on your usual terms, nothing changes for you",
+        "Accept an invoice with one wallet signature",
+        "Build an onchain payment record financiers can price",
       ],
     },
     {
       id: 3,
-      title: "Q2 2027",
-      data: [
-        { id: 7, text: "Independent security audit" },
-        { id: 8, text: "Accounting exports for suppliers" },
-        { id: 9, text: "More stablecoins as Arc adds them" },
+      title: "Financiers",
+      points: [
+        "Earn yield from real trade, not token emissions",
+        "Short tenors, priced onchain at a clear APR",
+        "Cap your exposure to every buyer you finance",
       ],
     },
   ],

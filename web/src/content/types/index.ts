@@ -1,14 +1,9 @@
 // Content types for the landing page.
 
-export interface RoadmapListItem {
-  id: number;
-  text: string;
-}
-
-export interface RoadmapList {
+export interface AudienceCard {
   id: number;
   title: string;
-  data: RoadmapListItem[];
+  points: string[];
 }
 
 export interface HomePageData {
@@ -27,7 +22,7 @@ export interface HomePageData {
   governance_suptitle: string;
   governance_title: string;
   governance_text: string;
-  roadmap_suptitle: string;
-  roadmap_title: string;
-  roadmap_list: RoadmapList[];
+  audience_suptitle: string;
+  audience_title: string;
+  audience_list: AudienceCard[];
 }
