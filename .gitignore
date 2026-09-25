@@ -8,3 +8,4 @@ broadcast/*/31337/
 .DS_Store
 graphify-out/
 contracts/broadcast/**/dry-run/
+.brand-preview/
