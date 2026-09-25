@@ -15,3 +15,15 @@
     letter-spacing: -0.02em;
     color: $kColorBlack;
 }
+
+.logo._lg {
+    gap: 12px;
+
+    .logo_mark {
+        width: 44px;
+        height: 44px;
+    }
+    .logo_text {
+        font-size: 34px;
+    }
+}
