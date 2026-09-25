@@ -98,6 +98,19 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 - The reference's "explore" section (between the scaling screens and About) was removed: with Dayzro content it only repeated the hero (3D mark and the name again). The flow is now hero, the three steps, About.
 - About keeps the reference layout and motion (line grid drawn on enter, title revealed letter by letter on scroll). Copy: label "ABOUT DAYZRO", title "We envision a world where no business waits 90 days to get paid", and a short paragraph on the problem (suppliers wait 30 to 120 days on delivered invoices) and the answer (a buyer's approval becomes a receivable anyone can finance onchain).
 
+## 4e. Landing section 4 (Who it's for)
+
+- Keeps the reference's dark "journey" design (winding path of lines drawn on scroll, skewed glass cards that open as the path reaches them), but the content is not a roadmap: it is the three sides of the product.
+- Label "WHO IT'S FOR", title "Built for everyone in the trade", and three cards of three points each: Suppliers (sunrise, at the start of the path), Buyers (magenta, on the path, centered exactly halfway between the other two), Financiers (gold, at the end).
+- All three cards are the same size: 20em wide with a shared minimum list height (`uniform` on `JourneyItem`), so copy length never changes the box.
+- The Suppliers card is flatter than the reference slot (-13deg instead of -18deg) and shifted left so it clears the title.
+
+## 4f. Footer
+
+- Reference layout (small centered line, brand block on the left, link columns, copyright row) with Dayzro content, plus a giant "Dayzro" wordmark in the sunrise to magenta gradient closing the page, cut at its baseline by the card edge.
+- Four link columns, all real destinations: Product (Launch App and anchors to How it works, Who it's for, Trust), Developers (repo, contracts, design doc, tests), Network (Arc Explorer, USDC and EURC token pages), Hackathon (Arc Microgrants).
+- A dark CTA card above the links was tried and dropped.
+
 ## 5. Rules
 
 - No em dashes anywhere (code, comments, docs, commits).
@@ -107,7 +120,7 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 
 ## 6. Still to do
 
-- Landing: Roadmap (journey), Trust (governance) and the footer have first Dayzro copy but still use the reference layout. Redesign them section by section.
+- Landing: Trust (governance) has first Dayzro copy but still uses the reference layout.
 - App: replace the bridge replica with the Dayzro flows (create invoice, receivable detail, finance, buyer profile, invoices list).
 - Add an Arc chain icon (the connect button still uses the Ethereum icon).
 - Optional: Reown project id.
