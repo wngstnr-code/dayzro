@@ -1,0 +1,286 @@
+.scaling {
+    overflow: hidden;
+    position: relative;
+}
+.scalling_wrapper {
+    display: flex;
+    width: fit-content;
+}
+.scaling_screen {
+    flex-shrink: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+    h2 {
+        @include setFontClashGrotest500(85px, 0.8, -0.02em, getColorBlack());
+
+        span {
+            color: getColorPink();
+        }
+    }
+
+    &:first-of-type {
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            height: 100%;
+            background: #fff;
+            z-index: -1;
+        }
+    }
+}
+.scaling_canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 50%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.5;
+}
+.scaling_lines {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 78vw;
+    width: 340vw;
+    min-width: 340vw;
+    opacity: 0.5;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+.scaling_rays {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(40vw, -50%);
+    width: 350vw;
+    pointer-events: none;
+}
+
+.scaling_main {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+// The outline mark must match the hero's 3D mark: the 3D ring renders at 78.65% of the hero
+// frame height (frame = width * 0.554), and the outline ring is 46/39 of this box's width.
+// So box width = frame width * 0.554 * 0.7865 * 39 / 46 = frame width * 0.3694.
+$iconScale: 0.3694;
+
+.scaling_main_iconWrapper {
+    position: relative;
+    width: 642px * $iconScale;
+}
+.scaling_main_iconMover {
+    width: 100%;
+}
+.scaling_main_icon {
+    width: 100%;
+    transform-origin: center;
+}
+
+.scaling_main_eth {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* Coin diameter (44/48 of its box) equals the mark's height (46/39 of the wrapper width). */
+    width: 128.67%;
+
+    svg {
+        opacity: 0;
+    }
+}
+
+.scaling_main_label {
+    margin-top: 80px;
+    @include setFontPublicSans600(14px, 1.2, 0.04em, getColorPink());
+    text-transform: uppercase;
+    text-align: center;
+}
+.scaling_main_title {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.scaling_text {
+    margin-top: 24px;
+    max-width: 26em;
+    @include dzDescription;
+}
+
+// Step screens. On desktop each copy block sits in a gap of the rays. The rays are sized in
+// vw and centered vertically, so the blocks are placed in vw from the screen's vertical center
+// and follow the lines at any viewport (gaps measured from the ray paths at 1280 to 1920 wide).
+.scaling_copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.scaling_dao_copy {
+    margin-top: auto;
+}
+
+@include screen-lg {
+    .scaling_copy {
+        position: absolute;
+        z-index: 1;
+        transform: translate(-50%, -50%);
+        margin: 0;
+    }
+    // 1 Accept: lower left, under the sweep of the rays.
+    .scaling_dao_copy {
+        width: 460px;
+        left: 26vw;
+        top: calc(50% + 16.5vw);
+    }
+    // 2 Sell: inside the ray's loop, so it is narrow and centered.
+    .scaling_token.scaling_copy {
+        width: 280px;
+        left: 49.5vw;
+        top: 50%;
+        align-items: center;
+        text-align: center;
+
+    }
+    // 3 Settle: right of where the rays end (visible once the scroll reaches its last frame).
+    .scaling_community_inner.scaling_copy {
+        width: 460px;
+        left: 97vw;
+        top: calc(50% + 4.5vw);
+    }
+}
+
+// Dao
+.scaling_dao {
+    max-width: 1010px;
+    padding: 0 20px 120px;
+    width: 100%;
+    margin: 0 auto;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+// Token
+.scaling_token {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+// Community
+.scaling_community {
+    max-width: 1380px;
+    padding: 0 20px;
+    width: 100%;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: flex-end;
+}
+.scaling_community_inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+@include screen-lg {
+    @media screen and (max-height: 820px) {
+        .scaling_screen {
+            h2 {
+                font-size: 68px;
+            }
+
+            &:first-of-type {
+                &::after {
+                    width: 320px;
+                }
+            }
+        }
+        .scaling_main_iconWrapper {
+            width: 500px * $iconScale;
+        }
+    }
+}
+
+@include -screen-lg {
+    .scaling_screen {
+        h2 {
+            font-size: 68px;
+        }
+
+        &:first-of-type {
+            &::after {
+                width: 320px;
+            }
+        }
+    }
+    .scaling_main_iconWrapper {
+        width: 500px * $iconScale;
+    }
+}
+
+@include -screen-md {
+    .scaling_screen {
+        h2 {
+            font-size: 55px;
+        }
+
+        &:first-of-type {
+            &::after {
+                width: 260px;
+            }
+        }
+    }
+    .scaling_main_label {
+        font-size: 12px;
+    }
+    .scaling_main_iconWrapper {
+        width: 480px * $iconScale;
+    }
+}
+
+@include -screen-sm {
+    .scaling_rays {
+        max-height: 500px;
+    }
+    .scaling_screen:not(:first-of-type) {
+        width: 150vw;
+    }
+    .scaling_rays {
+        width: 480vw;
+    }
+    .scaling_community {
+        padding-right: 12vw;
+    }
+    .scaling_dao {
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 389.98px) {
+    .scaling_main_iconWrapper {
+        width: 400px * $iconScale;
+    }
+}

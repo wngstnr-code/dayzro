@@ -1,0 +1,133 @@
+.footer {
+    padding-bottom: 12px;
+}
+.footer_wrapper {
+    background: #FFF;
+    padding: 24px 24px 30px;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.footer_title {
+    text-align: center;
+    font: 700 12px/1.455 $kFontPublicSans;
+    letter-spacing: 0.05em;
+    color: $kColorBlack;
+
+    text-transform: uppercase;
+
+    :global(b) {
+        font: inherit;
+        color: $kColorPink;
+    }
+}
+.footer_row {
+    margin-top: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+}
+.footer_content {
+    width: 212px;
+    flex-shrink: 0;
+}
+.footer_content_title {
+    @include setFontClashGrotest500(36px, 1.1, -0.015em, getColorBlack());
+}
+.footer_content_text {
+    margin-top: 16px;
+    @include setFontPublicSans400(16px, 1.5, normal, #6E5A52);
+}
+
+.footer_nav {
+    width: calc(100% - 242px);
+    padding: 40px 45px;
+    border-radius: 20px;
+}
+.footer_nav_inner {
+
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+
+    max-width: 925px;
+    width: 100%;
+
+}
+.footer_copyright {
+    margin-top: 40px;
+    text-align: right;
+    white-space: nowrap;
+
+    @include setFontPublicSans400(16px, 1.5, normal, #4A3A34);
+}
+
+.footer_nav_title {
+    @include setFontPublicSans600(16px, 1.5, 0.05em, #191e28);
+    text-transform: uppercase;
+}
+.footer_nav_list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+.footer_nav_link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:not([target="_blank"]) {
+        .footer_nav_link_name svg {
+            display: none;
+        }
+    }
+}
+.footer_nav_link_left {
+    display: flex;
+    flex-direction: column;
+}
+.footer_nav_link_name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    @include setFontPublicSans400(16px, 1.5, normal, #4A3A34);
+
+    svg {
+        width: 1.1em;
+        height: 1.1em;
+        stroke: getColorPink();
+    }
+}
+
+@include -screen-xl {
+    .footer_row {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+    .footer_nav {
+        width: 100%;
+        padding: 30px 0;
+    }
+    .footer_content {
+        text-align: center;
+    }
+    .footer_copyright {
+        text-align: center;
+        margin-top: 20px;
+    }
+}
+
+@include -screen-md {
+    .footer_nav_inner {
+        flex-wrap: wrap;
+        gap: 40px;
+        justify-content: flex-start;
+    }
+
+    .footer_nav_group {
+        min-width: 180px;
+    }
+}

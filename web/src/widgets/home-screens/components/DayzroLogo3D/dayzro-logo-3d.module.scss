@@ -1,0 +1,19 @@
+.host {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.fallback {
+    width: 70%;
+    height: 70%;
+    position: absolute;
+    left: 15%;
+    top: 15%;
+}

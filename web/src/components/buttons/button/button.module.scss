@@ -1,0 +1,140 @@
+.button {
+    display: flex;
+    align-items: center;
+    min-width: 48px;
+    flex-shrink: 0;
+
+    border-radius: 100px;
+    background: $kColorInk;
+    font-size: 0;
+    transition: background 0.2s ease;
+
+    &_clear {
+        .button_text {
+            padding: 14px 20px !important;
+        }
+    }
+
+    &_pink-outlined {
+        background: transparent;
+        border: 1.8px solid $kColorInk;
+        transition: background 0.1s ease;
+
+        .button_text {
+            color: $kColorInk;
+        }
+
+        &:hover {
+            background: rgba($kColorInk, 0.05);
+        }
+
+        .button_icon {
+            background: $kColorInk;
+
+            svg {
+                stroke: #fff;
+            }
+        }
+    }
+
+    &:hover {
+        .button_icon > span {
+            transform: translateX(0);
+        }
+    }
+}
+
+.button_wrapper {
+    display: flex;
+}
+
+.button_text {
+    flex-shrink: 0;
+    display: block;
+    padding-left: 20px;
+    padding-right: 4px;
+    white-space: nowrap;
+    font: 600 16px/1.255 $kFontPublicSans;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
+.button_icon {
+    margin: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #fff;
+
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    > span {
+        flex-shrink: 0;
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transform: translateX(-100%);
+        transition: transform 0.3s ease 0.1s;
+    }
+
+    svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        stroke: $kColorInk;
+    }
+}
+
+/* Label roll: the same motion as the arrow icon (0.3s ease, 0.1s delay), applied to the text. */
+.button_roll_track {
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.button_roll_current,
+.button_roll_next {
+    padding: 14px 24px !important;
+    transition: transform 0.3s ease 0.1s;
+}
+
+.button_roll_next {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+}
+
+.button_roll:hover {
+    .button_roll_current {
+        transform: translateX(100%);
+    }
+
+    .button_roll_next {
+        transform: translateX(0);
+    }
+}
+
+.animated {
+    transform: scale(0);
+    opacity: 0;
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+
+    [data-text-wrapper] {
+        overflow: hidden;
+        transition: width .5s ease 0.5s;
+    }
+
+    &InView {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

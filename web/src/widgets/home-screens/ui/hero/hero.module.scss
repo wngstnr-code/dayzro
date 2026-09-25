@@ -1,0 +1,137 @@
+.hero {
+    height: 100vh;
+    background: #f8f8f8;
+
+    overflow: hidden;
+    background-image: url("/img/home-new/hero-bg.webp");
+    background-size: cover;
+    background-position: right bottom;
+}
+
+.hero_wrapper {
+    /* The logo frame sits in the middle row, so it is centered in the viewport; the title hangs above it. */
+    display: grid;
+    grid-template-rows: 1fr auto 1fr;
+    justify-items: center;
+    height: 100vh;
+}
+
+.hero_title {
+    max-width: 10em;
+    @include setFontClashGrotest500(85px, 0.8, -0.02em, getColorBlack());
+    text-align: center;
+    align-self: end;
+    margin-bottom: 88px;
+}
+
+.hero_mark {
+    width: 642px;
+    aspect-ratio: 1 / 0.554;
+
+    background: url("/img/home-new/hero-frame.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    justify-content: center;
+
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-49.8%, -50%);
+        width: 242.52%;
+        aspect-ratio: 1 / 0.29351;
+        background: url("/img/home-new/bg-grid.webp");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        mask: radial-gradient(black, black, transparent);
+    }
+}
+
+.hero_mark_inner {
+    height: 100%;
+    aspect-ratio: 1.17 / 1;
+
+    position: relative;
+
+    /* Scan line sweeping top to bottom. */
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba($kColorSunrise, 0.25) 100%
+    );
+    background-size: 100% 50%;
+    background-position: 0 -100%;
+    background-repeat: no-repeat;
+    animation: bgAnimation 6s infinite ease-out;
+}
+
+.hero_mark_img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Dayzro 3D mark: a square as tall as the frame, centered both ways. */
+    aspect-ratio: 1;
+    height: 100%;
+}
+
+@include screen-lg {
+    @media screen and (max-height: 820px) {
+        .hero_title {
+            font-size: 68px;
+        }
+        .hero_mark {
+            width: 500px;
+        }
+    }
+}
+
+@include -screen-lg {
+    .hero_title {
+        font-size: 68px;
+    }
+    .hero_mark {
+        width: 500px;
+    }
+}
+
+@include -screen-md {
+    .hero_title {
+        font-size: 55px;
+    }
+    .hero_mark {
+        width: 480px;
+    }
+}
+
+@media screen and (max-width: 389.98px) {
+    .hero_title {
+        font-size: 44px;
+    }
+    .hero_title {
+        margin-bottom: 48px;
+    }
+    .hero_mark {
+        width: 400px;
+    }
+}
+
+@keyframes bgAnimation {
+    0% {
+        background-position: 0 -100%;
+    }
+    30%,
+    100% {
+        background-position: 0 200%;
+    }
+}
