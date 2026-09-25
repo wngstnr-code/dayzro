@@ -1,0 +1,17 @@
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo_mark {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.logo_text {
+    font: 600 22px/1 $kFontClashGrotesk;
+    letter-spacing: -0.02em;
+    color: $kColorBlack;
+}
