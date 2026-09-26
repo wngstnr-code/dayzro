@@ -22,6 +22,18 @@ No backend: contracts plus a static frontend reading Arc directly.
 
 Arc-native integrations: USDC and EURC, the Memo contract for invoice references, Multicall3From for approve and pay in one transaction, EIP-2612 permit.
 
+### Deployed on Arc mainnet (chain 5042)
+
+All three are source verified on [explorer.arc.io](https://explorer.arc.io) and Sourcify.
+
+| Contract | Address |
+| --- | --- |
+| DayzroRegistry | [`0x39cb24C0BacF217F20Db0D83650482B535dB1997`](https://explorer.arc.io/address/0x39cb24C0BacF217F20Db0D83650482B535dB1997) |
+| DayzroFacility | [`0x08EB46554100382082c81B3d5dd256136A19Ce85`](https://explorer.arc.io/address/0x08EB46554100382082c81B3d5dd256136A19Ce85) |
+| DayzroRenderer (library) | [`0x273C1AbEf3dE7aaC221053ef85f7229EbBa61073`](https://explorer.arc.io/address/0x273c1abef3de7aac221053ef85f7229ebba61073) |
+
+Protocol fee 0.25%. Deployment transactions are in `contracts/broadcast/Deploy.s.sol/5042/`.
+
 ## Development
 
 Requires [Arc Foundry](https://github.com/circlefin/arc-foundry) (`arc-forge`).
