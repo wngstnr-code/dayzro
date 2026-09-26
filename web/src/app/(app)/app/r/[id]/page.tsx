@@ -1,16 +1,20 @@
+import { Suspense } from "react";
 import { Card } from "@/dapp/components/Card";
+import { Receivable } from "@/dapp/components/Receivable";
 import { Page } from "@/dapp/components/Shell";
 
-// Placeholder until this page is built (one app page at a time).
 export default async function ReceivablePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    const valid = /^\d{1,20}$/.test(id) && BigInt(id) > BigInt(0);
     return (
         <Page>
-            <Card
-                className="w-full md:w-[524px]"
-                title={`Invoice #${id}`}
-                text="Terms, status and the next action for each side: accept, sell, pay or settle."
-            />
+            {valid ? (
+                <Suspense>
+                    <Receivable id={BigInt(id)} />
+                </Suspense>
+            ) : (
+                <Card className="w-full md:w-[524px]" title="Invoice not found" text="This link does not point to an invoice." />
+            )}
         </Page>
     );
 }
