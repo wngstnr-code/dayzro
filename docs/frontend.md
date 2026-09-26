@@ -130,6 +130,38 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 - Fields have no border and a filled surface (`--neutral-background`). On the light theme that surface is warm sand #F7ECE4, not white: white fields on the light card looked washed out.
 - Contract ABIs live in `src/dapp/abi/` (generated from `contracts/out`). Addresses come from `NEXT_PUBLIC_REGISTRY_ADDRESS` / `NEXT_PUBLIC_FACILITY_ADDRESS`.
 
+## 4i. App: Invoice page (/app/r/[id])
+
+- The link a supplier shares. Same stepper and card: Issued, Accepted, Paid on top; status badge, the amount, and the terms (supplier, buyer, holder once sold, due date with days left or late, guarantee, invoice number, document).
+- Invoice number and document are only stored as hashes. The share link carries `?ref=<invoice number>` and the page shows it with a check only when its keccak256 matches `ref`; "Check a file" hashes a file in the browser and compares it to `docHash`.
+- The card text and the actions follow the viewer's role, read live from the chain (refreshes every 15s and after every transaction):
+  - Buyer, pending: Accept (with "Back it with my guarantee" when their free guarantee covers it) or Reject.
+  - Supplier, pending: Cancel.
+  - Holder, accepted and not overdue: the best offer across all facilities (`quote`), shown as what they receive now, the discount at the facility's APR and the protocol fee; Sell approves the NFT for the Facility if needed, then `sell` with the quoted price as `minPrice`.
+  - Buyer, accepted or defaulted: Pay now, prefilled with what is left, approve then `pay`.
+  - Anyone: Settle from the buyer's guarantee (guaranteed, past due) or Mark as defaulted (unsecured, 30 days past due). Claim appears when the viewer has a claimable balance.
+- Multi-step actions run through `useSendTx` (`src/dapp/lib/tx.ts`): each call is simulated first, the button area shows "Approve USDC (1 of 2): confirm in wallet", and all reads refresh when it lands.
+
+## 4j. App: Invoices (/app/invoices)
+
+- One wide card (760px, the bridge's transactions list width) listing every receivable the connected account touches, newest first: ids it issued (`idsBySupplier`), ids it owes (`idsByBuyer`) and NFTs it holds (`tokenOfOwnerByIndex`, which covers bought ones). No indexer.
+- Filter chips with counts: All, Issued, To pay, Bought. Each row: id, counterparty ("To" or "From"), due date with days left or late, amount, status badge; the row opens `/app/r/[id]`.
+- Empty state offers New invoice. Status labels and colors are shared with the invoice page (`src/dapp/lib/receivable.ts`).
+
+## 4k. App: Finance (/app/finance)
+
+- For financiers. One wide card: three stats (ready to buy invoices = liquidity across their facilities, owed to them = remaining on receivables they hold, open invoices bought), then their facilities.
+- No facility yet: the "Open a facility" form is the page. Yearly rate (0.01% to 50%), longest time to due date (1 to 365 days), deposit with the USDC / EURC picker, and "buy guaranteed invoices from any buyer". A live line shows what the rate means: "a 1,000 USDC invoice due in 60 days is bought for 983.83 USDC", using the same formula as `DayzroFacility.quote`. Approve (if needed) then `open`.
+- Each facility is a row (rate, tenor, available, Buying or Paused) that expands into tabs: Add funds, Withdraw, Terms (rate, tenor, guaranteed toggle, pause) and Buyer limits. Buyer caps are a mapping with no list, so the tab looks up one buyer address, shows its current limit and what that buyer owes the financier now, and sets a new limit.
+
+## 4l. App: Buyer profile (/app/b, /app/b/[address])
+
+- A buyer's payment record, readable by anyone before they finance or sell to them. `/app/b` shows the connected wallet's own profile (or only the lookup when disconnected); `/app/b/[address]` any address. Buyer and supplier addresses on the invoice page link here.
+- Lookup field on top, then the address with badges: You, and the domain check. Domain verification needs no server: the buyer publishes TXT `_dayzro.<domain>` = `dayzro=<address>` and the browser reads it over DNS-over-HTTPS (Cloudflare).
+- Payment record per token (USDC / EURC chips) from `buyerStats`: accepted, paid on time (rate and count), paid late (with average days late), defaults, accepted and paid volume, owed now; plus the guarantee set aside and how much of it is locked. Then the latest 8 invoices owed, linking to each.
+- On your own profile: edit the public profile (company name, website domain, with the exact TXT record to add) and deposit or withdraw your guarantee (only the unlocked part can leave).
+- Shared form pieces (field, stat tile, toggle, transaction status) live in `src/dapp/components/Form.tsx`.
+
 ## 5. Rules
 
 - No em dashes anywhere (code, comments, docs, commits).
@@ -140,5 +172,5 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 ## 6. Still to do
 
 - Landing: Trust (governance) has first Dayzro copy but still uses the reference layout.
-- App: replace the bridge replica with the Dayzro flows (create invoice, receivable detail, finance, buyer profile, invoices list).
+- Deploy the contracts to Arc mainnet, set NEXT_PUBLIC_REGISTRY_ADDRESS / NEXT_PUBLIC_FACILITY_ADDRESS / NEXT_PUBLIC_RPC_URL, and run one real end-to-end invoice.
 - Optional: Reown project id.
