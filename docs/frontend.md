@@ -111,6 +111,25 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 - Four link columns, all real destinations: Product (Launch App and anchors to How it works, Who it's for, Trust), Developers (repo, contracts, design doc, tests), Network (Arc Explorer, USDC and EURC token pages), Hackathon (Arc Microgrants).
 - A dark CTA card above the links was tried and dropped.
 
+## 4g. App shell (/app)
+
+- Keeps the reference bridge chrome (header, side drawer, glass cards, stepper, pointer glow). Pages are built one at a time, in the user's order.
+- Side navigation: New invoice (`/app`), Invoices (`/app/invoices`), Finance (`/app/finance`), Buyer profile (`/app/b`, detail at `/app/b/[address]`), then external Explorer (explorer.arc.io) and Guide (repo README). A section stays active on its detail routes.
+- Header tabs (where the bridge had Token / NFT) are the two sides that start a flow: Supplier (`/app`) and Financier (`/app/finance`). They are links, active by route.
+- Wallet: "Connect wallet" has the same size as the header tabs and no icon. Without a Reown project id it opens a picker of every EIP-6963 wallet (OKX, Rabby, MetaMask, ...), so the clicked wallet connects, not whichever one owns `window.ethereum`. The connected pill shows Arc's mark (`public/chains/arc.svg`, from arc.io) and opens a small menu: Copy address, Disconnect, and a single "Switch to Arc" row only when needed (wrong chain, or on the local fork a wallet still using Arc mainnet's RPC).
+- Pages not built yet show only their title and one line of what they will do, no fake data.
+- Development runs against a local arc-anvil fork of Arc mainnet with the contracts deployed to it. Mainnet deploy comes after the app works.
+
+## 4h. App: New invoice (/app)
+
+- Replaces the bridge form, same stepper and card: Details, Review, Confirm.
+- Details: buyer address, amount with a USDC / EURC selector (where the bridge had its token picker), due date (tomorrow to 364 days, stored as 23:59:59 local time of that day), invoice or PO number (required, stored as `keccak256` in `ref`), and an optional document. The document is hashed in the browser (`docHash`) and never uploaded.
+- Validation mirrors `DayzroRegistry._create` (valid buyer that is not you, at least 1 token, due date in range). Errors show only after the first Continue.
+- Confirm: one `createInvoice` transaction. Before sending, the app simulates it and checks that the wallet's own node has the registry deployed, so a wallet on the wrong RPC gets a clear message instead of a dead transaction. Contract reverts are translated into sentences (`readableError` in `src/dapp/lib/contracts.ts`).
+- Success: the card title becomes "Invoice #id created" with the share link `/app/r/[id]` for the buyer, Open invoice and Create another.
+- Fields have no border and a filled surface (`--neutral-background`). On the light theme that surface is warm sand #F7ECE4, not white: white fields on the light card looked washed out.
+- Contract ABIs live in `src/dapp/abi/` (generated from `contracts/out`). Addresses come from `NEXT_PUBLIC_REGISTRY_ADDRESS` / `NEXT_PUBLIC_FACILITY_ADDRESS`.
+
 ## 5. Rules
 
 - No em dashes anywhere (code, comments, docs, commits).
@@ -122,5 +141,4 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 
 - Landing: Trust (governance) has first Dayzro copy but still uses the reference layout.
 - App: replace the bridge replica with the Dayzro flows (create invoice, receivable detail, finance, buyer profile, invoices list).
-- Add an Arc chain icon (the connect button still uses the Ethereum icon).
 - Optional: Reown project id.
