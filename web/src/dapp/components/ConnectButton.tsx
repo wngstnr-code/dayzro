@@ -2,11 +2,12 @@
 
 import { useAppKit, useAppKitState, useAppKitTheme } from "@reown/appkit/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { type EIP1193Provider, formatUnits } from "viem";
+import type { EIP1193Provider } from "viem";
 import { arc } from "viem/chains";
 import { useAccount, useBalance, useConnect, useDisconnect, useSwitchChain } from "wagmi";
 import { cn } from "@/dapp/lib/cn";
-import { renderNativeBalance, shortenAddress, useIsMobile } from "@/dapp/lib/hooks";
+import { formatAmount } from "@/dapp/lib/format";
+import { shortenAddress, useIsMobile } from "@/dapp/lib/hooks";
 import { useTheme } from "@/dapp/lib/theme";
 import { contracts, isLocalChain, rpcUrl } from "@/dapp/lib/contracts";
 import { hasAppKit } from "@/dapp/lib/wallet";
@@ -19,7 +20,7 @@ function Connected({ onClick, className }: { onClick: () => void; className?: st
     const { address, chain } = useAccount();
     const { data: balance } = useBalance({ address });
     const isMobile = useIsMobile();
-    const formatted = balance ? formatUnits(balance.value, balance.decimals) : "0";
+    const formatted = balance ? formatAmount(balance.value, balance.decimals) : "0";
 
     return (
         <button
@@ -30,7 +31,7 @@ function Connected({ onClick, className }: { onClick: () => void; className?: st
             )}>
             <img alt="chain icon" className="w-[24px] ml-[10px]" src={CHAIN_ICON} />
             <span className="flex items-center text-secondary-content justify-self-start gap-4 md:text-normal text-sm">
-                {!isMobile && renderNativeBalance(formatted, chain?.nativeCurrency.symbol ?? "USDC", 6)}
+                {!isMobile && `${formatted} ${chain?.nativeCurrency.symbol ?? "USDC"}`}
                 <span className="flex items-center justify-center h-[35px] min-w-[133px] text-center text-tertiary-content btn-glass-bg rounded-full px-[10px] py-[4px] bg-tertiary-background">
                     {shortenAddress(address, 4, 6)}
                 </span>

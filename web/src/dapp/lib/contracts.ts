@@ -44,6 +44,9 @@ const revertMessages: Record<string, string> = {
     NotSupplier: "Only the supplier can do this.",
     NotHolder: "Only the current holder can do this.",
     WrongStatus: "This receivable is not in the right state for that action.",
+    NotFinancier: "Only the facility's financier can do this.",
+    InvalidTerms: "The rate must be between 0.01% and 50% a year, and the tenor between 1 and 365 days.",
+    PriceBelowMin: "The price moved since the quote. Try again.",
 };
 
 /** Turns a viem error into one readable sentence (wallet rejection, known contract revert, or the short message). */
@@ -52,6 +55,7 @@ export function readableError(error: unknown): string {
         const revert = error.walk((e) => e instanceof ContractFunctionRevertedError);
         if (revert instanceof ContractFunctionRevertedError) {
             const name = revert.data?.errorName;
+            if (name === "NotSellable") return `The facility cannot buy this right now (${String(revert.data?.args?.[0])}).`;
             if (name && revertMessages[name]) return revertMessages[name];
             if (name) return `The contract rejected this (${name}).`;
         }

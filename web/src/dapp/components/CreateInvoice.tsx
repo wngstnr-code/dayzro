@@ -1,28 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { type ChangeEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { type Address, createPublicClient, custom, formatUnits, getAddress, isAddress, keccak256, parseEventLogs, parseUnits, toBytes } from "viem";
-import { arc } from "viem/chains";
-import { useAccount, usePublicClient, useWalletClient } from "wagmi";
+import { type ChangeEvent, type ReactNode, useMemo, useState } from "react";
+import { type Address, formatUnits, getAddress, isAddress, keccak256, parseEventLogs, parseUnits, toBytes } from "viem";
+import { useAccount } from "wagmi";
 import { registryAbi } from "@/dapp/abi/registry";
 import { cn } from "@/dapp/lib/cn";
-import {
-    contracts,
-    explorerTx,
-    isLocalChain,
-    MAX_TENOR_DAYS,
-    MIN_FACE,
-    readableError,
-    type Token,
-    tokens,
-    ZERO_HASH,
-} from "@/dapp/lib/contracts";
+import { contracts, explorerTx, MAX_TENOR_DAYS, MIN_FACE, type Token, tokens, ZERO_HASH } from "@/dapp/lib/contracts";
+import { busyLabel, useSendTx } from "@/dapp/lib/tx";
 import { shortenAddress } from "@/dapp/lib/hooks";
 import { ActionButton, StepBack } from "./Buttons";
 import { Card, Step, Stepper } from "./Card";
 import { Icon } from "./Icon";
 import { TokenIcon } from "./TokenIcon";
+import { TokenSelect } from "./TokenSelect";
 
 type Doc = { name: string; size: number; hash: `0x${string}` };
 
@@ -36,13 +27,6 @@ type Draft = {
 };
 
 type Errors = Partial<Record<"buyer" | "amount" | "dueDate" | "invoiceNo", string>>;
-
-type TxState =
-    | { kind: "idle" }
-    | { kind: "signing" }
-    | { kind: "mining"; hash: `0x${string}` }
-    | { kind: "done"; hash: `0x${string}`; id: bigint }
-    | { kind: "error"; message: string };
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -129,57 +113,6 @@ const inputClass = (error?: string) =>
         "w-full input-box border-0 bg-neutral-background placeholder:text-tertiary-content h-[56px] px-[15px]",
         error && "error",
     );
-
-function TokenSelect({ value, onChange }: { value: Token; onChange: (t: Token) => void }) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!open) return;
-        const close = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
-        document.addEventListener("mousedown", close);
-        return () => document.removeEventListener("mousedown", close);
-    }, [open]);
-
-    return (
-        <div ref={ref} className="relative h-full min-w-[151px] z-30">
-            <button
-                type="button"
-                onClick={() => setOpen((o) => !o)}
-                className="f-between-center w-full h-full px-[20px] py-[14px] input-box bg-neutral-background border-0 shadow-none outline-none !rounded-l-[0px] !rounded-r-[10px]">
-                <div className="f-row items-center gap-2">
-                    <TokenIcon symbol={value.symbol} />
-                    <span className="title-subsection-bold text-base">{value.symbol}</span>
-                </div>
-                <Icon type="chevron-down" size={10} />
-            </button>
-            {open && (
-                <ul className="absolute right-0 mt-2 w-[200px] rounded-[10px] bg-neutral-background border border-primary-border-dark p-2 shadow-lg">
-                    {tokens.map((t) => (
-                        <li key={t.symbol}>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    onChange(t);
-                                    setOpen(false);
-                                }}
-                                className={cn(
-                                    "w-full f-row items-center gap-3 px-3 py-2 rounded-[8px] hover:bg-primary-interactive-hover",
-                                    t.symbol === value.symbol && "bg-primary-interactive-hover",
-                                )}>
-                                <TokenIcon symbol={t.symbol} />
-                                <span className="flex flex-col items-start">
-                                    <span className="body-bold">{t.symbol}</span>
-                                    <span className="text-xs text-tertiary-content">{t.name}</span>
-                                </span>
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
-}
 
 function ReviewRow({ label, children }: { label: string; children: ReactNode }) {
     return (
@@ -380,36 +313,17 @@ function ConfirmStep({
     onReset: () => void;
     onCreated: (id: bigint) => void;
 }) {
-    const { address, isConnected, chainId } = useAccount();
-    const publicClient = usePublicClient({ chainId: arc.id });
-    const { data: walletClient } = useWalletClient();
-    const [tx, setTx] = useState<TxState>({ kind: "idle" });
+    const { isConnected } = useAccount();
+    const { send, state: tx, busy } = useSendTx();
+    const [created, setCreated] = useState<bigint>();
     const [copied, setCopied] = useState(false);
-    const busy = tx.kind === "signing" || tx.kind === "mining";
 
     const create = async () => {
-        const registry = contracts.registry;
-        if (!registry || !publicClient || !walletClient || !address) return;
-        try {
-            setTx({ kind: "signing" });
-            if (chainId !== arc.id) await walletClient.switchChain({ id: arc.id });
-
-            // Guard against a wallet pointed at another node: the registry must exist where the wallet sends.
-            const walletNode = createPublicClient({ chain: arc, transport: custom({ request: walletClient.request }) });
-            const code = await walletNode.getCode({ address: registry });
-            if (!code || code === "0x") {
-                setTx({
-                    kind: "error",
-                    message: isLocalChain
-                        ? "Your wallet is not on the local fork. Add a network with RPC http://127.0.0.1:8545 and chain id 5042."
-                        : "Your wallet's network does not have the Dayzro registry.",
-                });
-                return;
-            }
-
-            const { request } = await publicClient.simulateContract({
-                account: address,
-                address: registry,
+        if (!contracts.registry) return;
+        const receipt = await send([
+            {
+                label: "Create invoice",
+                address: contracts.registry,
                 abi: registryAbi,
                 functionName: "createInvoice",
                 args: [
@@ -420,25 +334,17 @@ function ConfirmStep({
                     draft.doc?.hash ?? ZERO_HASH,
                     keccak256(toBytes(draft.invoiceNo.trim())),
                 ],
-            });
-            const hash = await walletClient.writeContract(request);
-            setTx({ kind: "mining", hash });
-
-            const receipt = await publicClient.waitForTransactionReceipt({ hash });
-            if (receipt.status !== "success") {
-                setTx({ kind: "error", message: "The transaction reverted." });
-                return;
-            }
-            const [created] = parseEventLogs({ abi: registryAbi, eventName: "InvoiceCreated", logs: receipt.logs });
-            setTx({ kind: "done", hash, id: created.args.id });
-            onCreated(created.args.id);
-        } catch (error) {
-            setTx({ kind: "error", message: readableError(error) });
-        }
+            },
+        ]);
+        if (!receipt) return;
+        const [event] = parseEventLogs({ abi: registryAbi, eventName: "InvoiceCreated", logs: receipt.logs });
+        setCreated(event.args.id);
+        onCreated(event.args.id);
     };
 
-    if (tx.kind === "done") {
-        const path = `/app/r/${tx.id}`;
+    if (tx.kind === "done" && created !== undefined) {
+        // The invoice number is only stored as a hash, so the link carries it for the buyer's page to verify.
+        const path = `/app/r/${created}?ref=${encodeURIComponent(draft.invoiceNo.trim())}`;
         const link = typeof window !== "undefined" ? `${window.location.origin}${path}` : path;
         const explorer = explorerTx(tx.hash);
         return (
@@ -481,8 +387,7 @@ function ConfirmStep({
     }
 
     const face = parseAmount(draft.amount, draft.token) ?? BigInt(0);
-    const label =
-        tx.kind === "signing" ? "Confirm in your wallet" : tx.kind === "mining" ? "Creating invoice" : "Create invoice";
+    const label = busyLabel(tx) ?? "Create invoice";
 
     return (
         <div className="mt-[30px]">

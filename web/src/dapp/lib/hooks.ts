@@ -36,8 +36,3 @@ export function shortenAddress(address: string | undefined, charsStart = 6, char
     if (!address) return "0x";
     return [address.slice(0, charsStart), address.slice(-charsEnd)].join(sep);
 }
-
-/** Same output as the bridge UI's renderEthBalance, with the native symbol of the chain. */
-export function renderNativeBalance(formatted: string, symbol: string, maxlength = 8): string {
-    return `${formatted.slice(0, maxlength)} ${symbol}`;
-}
