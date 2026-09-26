@@ -35,7 +35,11 @@ export function useSendTx() {
     const queryClient = useQueryClient();
 
     const send = async (calls: Call[]): Promise<TransactionReceipt | undefined> => {
-        if (!publicClient || !walletClient || !address || calls.length === 0) return;
+        if (calls.length === 0) return;
+        if (!publicClient || !walletClient || !address) {
+            setState({ kind: "error", message: "Your wallet is still connecting. Try again in a moment." });
+            return;
+        }
         try {
             setState({ kind: "signing", label: calls[0].label, step: 1, steps: calls.length });
             if (chainId !== arc.id) await walletClient.switchChain({ id: arc.id });

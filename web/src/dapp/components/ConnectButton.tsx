@@ -18,9 +18,10 @@ const CHAIN_ICON = "/chains/arc.svg";
 
 function Connected({ onClick, className }: { onClick: () => void; className?: string }) {
     const { address, chain } = useAccount();
-    const { data: balance } = useBalance({ address });
+    // Always Arc, whatever network the wallet is on; unknown is shown as "…", never as a fake 0.
+    const { data: balance } = useBalance({ address, chainId: arc.id });
     const isMobile = useIsMobile();
-    const formatted = balance ? formatAmount(balance.value, balance.decimals) : "0";
+    const formatted = balance ? formatAmount(balance.value, balance.decimals) : "…";
 
     return (
         <button
