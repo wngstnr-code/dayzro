@@ -175,5 +175,5 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 
 ## 6. Still to do
 
-- Contracts are live on Arc mainnet (addresses in the root README) and set in `.env`. Still to do: one real end-to-end invoice on mainnet through the app.
+- Contracts are live on Arc mainnet (addresses in the root README) and set in `.env`. A full cycle was run on mainnet through the app UI on 2026-09-26: facility #1 opened, invoice #1 (E2E-MAINNET-001, 1 USDC) created, accepted, sold to the facility and paid in full to the holder.
 - Optional: Reown project id.
