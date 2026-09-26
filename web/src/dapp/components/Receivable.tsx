@@ -46,7 +46,12 @@ function useReceivable(id: bigint, viewer?: Address) {
                 functionName: "getReceivable",
                 args: [id],
             });
-            if (r.status === Status.None) return null;
+            if (r.status === Status.None) {
+                // Only call it missing when the id is past the last one issued; anything else is a bad read.
+                const total = await client!.readContract({ address: registry!, abi: registryAbi, functionName: "totalReceivables" });
+                if (id <= total) throw new Error("Receivable read returned empty data");
+                return null;
+            }
             const token = tokens.find((t) => same(t.address, r.token));
 
             const extra: {
