@@ -338,7 +338,7 @@ const config: Config = {
           '--warning-background': '#FFF6DE',
 
           '--elevated-background': '#FFFAF6',
-          '--neutral-background': '#FFFFFF',
+          '--neutral-background': '#F7ECE4', // warm sand, so fields read as fields on the light card
           '--neutral-content': '#1A1014',
           '--neutral-accent': '#E9E1DC',
           '--overlay-background': 'rgba(26, 16, 20, 0.2)',

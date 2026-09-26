@@ -235,3 +235,15 @@
 
   /* TODO: add more components here */
 }
+
+/* Native date picker follows the app theme (calendar popup and icon). */
+[data-theme="dark"] .dz-date {
+  color-scheme: dark;
+}
+[data-theme="light"] .dz-date {
+  color-scheme: light;
+}
+.dz-date::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+}
