@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
 import { arc } from "viem/chains";
 import { cookieStorage, createConfig, createStorage, http, injected, WagmiProvider, type Config } from "wagmi";
+import { rpcUrl } from "./contracts";
 
 /**
  * WalletConnect / Reown project id (free, from https://cloud.reown.com).
@@ -14,7 +15,6 @@ import { cookieStorage, createConfig, createStorage, http, injected, WagmiProvid
 export const reownProjectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID ?? "";
 export const hasAppKit = reownProjectId.length > 0;
 
-const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || arc.rpcUrls.default.http[0];
 
 function buildConfig(): Config {
     if (!hasAppKit) {
