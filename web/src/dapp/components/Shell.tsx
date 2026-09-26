@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import { cn } from "@/dapp/lib/cn";
@@ -13,38 +14,46 @@ export const drawerToggleId = "side-drawer-toggle";
 
 type NavTab = { href: string; icon: IconType; label: string };
 
-// Same structure as the bridge UI's navigationItems.ts. Labels and routes become Dayzro's in the next step.
+// Same structure as the bridge UI's navigationItems.ts, with Dayzro's pages.
 const sideNavigationTabs: NavTab[] = [
-    { href: "/app", icon: "bridge", label: "Bridge" },
-    { href: "/app/relayer", icon: "relayer", label: "Manual Claim" },
-    { href: "/app/transactions", icon: "transactions", label: "Transactions" },
+    { href: "/app", icon: "plus-circle", label: "New invoice" },
+    { href: "/app/invoices", icon: "transactions", label: "Invoices" },
+    { href: "/app/finance", icon: "cards", label: "Finance" },
+    { href: "/app/b", icon: "user-circle", label: "Buyer profile" },
 ];
 
 const externalTabs: NavTab[] = [
-    { href: "https://app.uniswap.org", icon: "swap", label: "Swap" },
     { href: "https://explorer.arc.io", icon: "explorer", label: "Explorer" },
-    { href: "https://docs.arc.io", icon: "guide", label: "Guide" },
+    { href: "https://github.com/wngstnr-code/dayzro#readme", icon: "guide", label: "Guide" },
+];
+
+// Detail pages live under their section: /app/b/0x... keeps "Buyer profile" active.
+function isActive(pathname: string, href: string) {
+    return href === "/app" ? pathname === "/app" : pathname === href || pathname.startsWith(`${href}/`);
+}
+
+// The two sides that start a flow: suppliers issue invoices, financiers fund them.
+const headerTabs = [
+    { href: "/app", label: "Supplier" },
+    { href: "/app/finance", label: "Financier" },
 ];
 
 export function HeaderTabs({ className, onClick }: { className?: string; onClick?: () => void }) {
-    const [active, setActive] = useState<"token" | "nft">("token");
-    const tab = (id: "token" | "nft", label: string) => (
-        <button
-            className={cn(
-                active === id ? "btn-primary text-white" : "btn-ghost",
-                "btn h-[40px] px-[28px] rounded-full",
-            )}
-            onClick={() => {
-                setActive(id);
-                onClick?.();
-            }}>
-            <span>{label}</span>
-        </button>
-    );
+    const pathname = usePathname();
     return (
         <div className={cn("space-x-2", className)}>
-            {tab("token", "Token")}
-            {tab("nft", "NFT")}
+            {headerTabs.map((tab) => (
+                <Link
+                    key={tab.href}
+                    href={tab.href}
+                    onClick={onClick}
+                    className={cn(
+                        isActive(pathname, tab.href) ? "btn-primary text-white" : "btn-ghost",
+                        "btn h-[40px] px-[28px] rounded-full",
+                    )}>
+                    <span>{tab.label}</span>
+                </Link>
+            ))}
         </div>
     );
 }
@@ -118,7 +127,7 @@ function SideNavigation({
                         <div role="button" tabIndex={0} onClick={close} onKeyDown={(e) => e.key === "Escape" && close()}>
                             <ul className="menu p-0 space-y-2">
                                 {sideNavigationTabs.map((tab) => {
-                                    const active = pathname === tab.href;
+                                    const active = isActive(pathname, tab.href);
                                     return (
                                         <li key={tab.href}>
                                             <LinkButton href={tab.href} active={active} onClick={close}>
