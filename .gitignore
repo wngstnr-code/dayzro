@@ -9,3 +9,6 @@ broadcast/*/31337/
 graphify-out/
 contracts/broadcast/**/dry-run/
 .brand-preview/
+
+# Local Arc fork (scripts/fork.sh)
+.fork/
