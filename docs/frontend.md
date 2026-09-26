@@ -111,6 +111,10 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 - Four link columns, all real destinations: Product (Launch App and anchors to How it works, Who it's for, Trust), Developers (repo, contracts, design doc, tests), Network (Arc Explorer, USDC and EURC token pages), Hackathon (Arc Microgrants).
 - A dark CTA card above the links was tried and dropped.
 
+## 4f2. Landing: Trust
+
+- Keeps the reference layout with the Dayzro copy ("No custody, no backend, only contracts"). Reviewed and approved as is.
+
 ## 4g. App shell (/app)
 
 - Keeps the reference bridge chrome (header, side drawer, glass cards, stepper, pointer glow). Pages are built one at a time, in the user's order.
@@ -171,6 +175,5 @@ All reference colors were swapped for Dayzro colors (code, SVG, raster images, v
 
 ## 6. Still to do
 
-- Landing: Trust (governance) has first Dayzro copy but still uses the reference layout.
-- Deploy the contracts to Arc mainnet, set NEXT_PUBLIC_REGISTRY_ADDRESS / NEXT_PUBLIC_FACILITY_ADDRESS / NEXT_PUBLIC_RPC_URL, and run one real end-to-end invoice.
+- Contracts are live on Arc mainnet (addresses in the root README) and set in `.env`. Still to do: one real end-to-end invoice on mainnet through the app.
 - Optional: Reown project id.
