@@ -268,9 +268,10 @@ event Financed(uint256 indexed fid, uint256 indexed rid, address indexed seller,
 - Invariant: handler acak (create/accept/pay/transfer/sell/default/reduce/withdraw) untuk invariant 1–8.
 - **Fork test Arc mainnet dengan `arc-anvil`** (anvil biasa tidak mereproduksi USDC native Arc), memakai USDC/EURC asli, Memo, Multicall3From, dan permit.
 
-## 8. Frontend (Vercel, tanpa API route)
+## 8. Frontend (Vercel, tanpa backend)
 - Next.js App Router + wagmi/viem + RainbowKit. Chain Arc 5042, RPC `https://rpc.mainnet.arc.io`.
-- **Tidak ada** server actions, route handler, atau database. Semua baca lewat view + Multicall3, semua tulis lewat wallet user.
+- **Tidak ada** server actions atau database. Semua baca lewat view + Multicall3, semua tulis lewat wallet user.
+- Satu pengecualian: `/api/rpc`, relay baca-saja ke RPC publik Arc (fallback ke 4 endpoint, hanya metode baca, tanpa state dan tanpa kunci). Alasannya: Brave Shields dan beberapa ad-blocker memblokir request ke `rpc.*.arc.io`, sedangkan request ke domain sendiri tidak diblokir. Transaksi tetap dikirim wallet lewat node-nya sendiri.
 - Halaman:
   - `/` ringkasan protokol (total volume, facility aktif), dibaca dari kontrak.
   - `/new` supplier membuat invoice (hash PDF dihitung di browser, file tidak diunggah) dan mendapat link `/r/[id]`.

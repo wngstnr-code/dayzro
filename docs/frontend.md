@@ -17,7 +17,7 @@ Living record of frontend decisions. Update this file whenever a decision change
   - `src/app/(landing)`: SCSS modules, GSAP, Lottie, AOS.
   - `src/app/(app)`: Tailwind 3.4.3 + daisyUI 4.10.5 (pinned to match the reference), styles in `src/dapp/styles`, components in `src/dapp/components`.
 - Link from landing to app is a plain `<a href="/app">` (full page load, because the root layouts differ).
-- No offchain backend. The app talks to Arc directly with wagmi v3 + viem (built-in `arc` chain). Reown AppKit is used when `NEXT_PUBLIC_REOWN_PROJECT_ID` is set; otherwise it falls back to injected wallets.
+- No offchain backend. The app talks to Arc with wagmi v3 + viem (built-in `arc` chain). Reads in the browser go through `/api/rpc` (`src/app/api/rpc/route.ts`), a stateless read-only relay with failover across Arc's four public endpoints, because Brave Shields and some blockers drop requests to `rpc.*.arc.io`. The local fork is read directly. Wallets send transactions through their own nodes. Reown AppKit is used when `NEXT_PUBLIC_REOWN_PROJECT_ID` is set; otherwise it falls back to injected wallets.
 - One `.env` at the repo root for everything.
 - Hosting: Vercel.
 
