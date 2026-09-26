@@ -11,10 +11,17 @@ export const contracts = {
     facility: envAddress(process.env.NEXT_PUBLIC_FACILITY_ADDRESS),
 };
 
+/** The Arc node itself. Wallets are pointed here (wallet_addEthereumChain), and the relay forwards to it first. */
 export const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || arc.rpcUrls.default.http[0];
 
 /** True when the app runs against a local node (scripts/fork.sh), where explorer links would be dead. */
 export const isLocalChain = /\/\/(127\.0\.0\.1|localhost)[:/]/.test(rpcUrl);
+
+/**
+ * Where the app reads from. In the browser that is our own /api/rpc relay: some browsers (Brave Shields)
+ * and blockers drop requests to rpc.*.arc.io, but never same-origin ones. The local fork is read directly.
+ */
+export const readRpcUrl = typeof window !== "undefined" && !isLocalChain ? `${window.location.origin}/api/rpc` : rpcUrl;
 
 export function explorerTx(hash: string): string | undefined {
     return isLocalChain ? undefined : `${arc.blockExplorers.default.url}/tx/${hash}`;

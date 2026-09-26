@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
 import { arc } from "viem/chains";
 import { cookieStorage, createConfig, createStorage, http, injected, WagmiProvider, type Config } from "wagmi";
-import { rpcUrl } from "./contracts";
+import { readRpcUrl } from "./contracts";
 
 /**
  * WalletConnect / Reown project id (free, from https://cloud.reown.com).
@@ -21,7 +21,7 @@ function buildConfig(): Config {
         return createConfig({
             chains: [arc],
             connectors: [injected()],
-            transports: { [arc.id]: http(rpcUrl) },
+            transports: { [arc.id]: http(readRpcUrl) },
             ssr: true,
             storage: createStorage({ storage: cookieStorage }),
         });
@@ -30,7 +30,7 @@ function buildConfig(): Config {
     const adapter = new WagmiAdapter({
         projectId: reownProjectId,
         networks: [arc],
-        transports: { [arc.id]: http(rpcUrl) },
+        transports: { [arc.id]: http(readRpcUrl) },
         ssr: true,
         storage: createStorage({ storage: cookieStorage }),
     });
