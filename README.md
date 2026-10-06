@@ -6,6 +6,8 @@ A supplier issues an invoice, the buyer accepts it onchain, and the invoice beco
 
 No backend: contracts plus a static frontend reading Arc directly.
 
+**Live app:** [dayzro.vercel.app](https://dayzro.vercel.app) (Arc mainnet, chain 5042)
+
 ## Repository
 
 | Path | Contents |
