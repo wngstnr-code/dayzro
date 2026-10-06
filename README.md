@@ -8,6 +8,8 @@ No backend: contracts plus a static frontend reading Arc directly.
 
 **Live app:** [dayzro.vercel.app](https://dayzro.vercel.app) (Arc mainnet, chain 5042)
 
+**Demo video:** [youtu.be/eUjfSbaLfh8](https://youtu.be/eUjfSbaLfh8) (2 min walkthrough)
+
 ## Repository
 
 | Path | Contents |
